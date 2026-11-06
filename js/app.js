@@ -33,13 +33,17 @@ function toast(message) {
 function buildListShell() {
   listPane.innerHTML = `
     <div class="list-head"><h1 class="pane-title" id="listTitle" tabindex="-1">Inquiries</h1><span class="muted" id="openCount"></span></div>
+    <div class="filters">
     <div class="tiles" role="group" aria-label="Filter by status">
       ${STATUSES.map((s) => `<button type="button" class="tile" data-status="${esc(s)}" aria-pressed="false"><span class="tile__label">${icon(statusIcon(s), 14)}${esc(s)}</span><span class="tile__count" data-count="${esc(s)}">0</span></button>`).join('')}
     </div>
+      <div class="filters__right">
     <fieldset class="filter-group"><legend>Priority</legend>
       <div class="chips">${PRIORITIES.map((p) => `<button type="button" class="chip" data-priority="${p}" aria-pressed="false">${icon(priorityIcon(p))}${p}</button>`).join('')}</div>
     </fieldset>
     <label class="search">${icon('search', 20)}<span class="sr-only">Search inquiries by name, phone, email or message</span><input type="search" id="search" placeholder="Search name, phone or message" autocomplete="off"></label>
+      </div>
+    </div>
     <div class="summary-row"><p class="muted" id="summary" role="status"></p><button type="button" class="linklike" id="clearFilters" data-clear hidden>Clear filters</button></div>
     <div id="results"></div>`;
 }
@@ -101,7 +105,7 @@ function updateList() {
   const resolved = resolvedInquiries();
   const showResolvedSection = !filters.status && all.some((i) => i.status === 'Resolved');
   let html;
-  if (items.length) html = `<ul class="cards">${items.map(cardHtml).join('')}</ul>`;
+  if (items.length) html = `<div class="cards-head" aria-hidden="true"><span>Customer</span><span>Inquiry</span><span>Priority</span><span>Status</span><span>Assigned to</span><span></span></div><ul class="cards">${items.map(cardHtml).join('')}</ul>`;
   else if (active) html = `<div class="empty"><h2>No open inquiries match</h2><p class="muted">Try a different search or clear the filters.</p><button type="button" class="btn btn--secondary" data-clear>Clear filters</button></div>`;
   else html = `<div class="empty"><h2>No open inquiries</h2><p class="muted">New inquiries will show up here.</p><a class="btn btn--primary" href="#/new">${icon('plus', 18)}Add inquiry</a></div>`;
   if (showResolvedSection) {

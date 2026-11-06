@@ -63,8 +63,12 @@ body:not([data-view="list"]) .list-pane { display: none; }
 .search:focus-within { outline: var(--size-focus-ring) solid var(--color-border-focus); outline-offset: 2px; }
 .search input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--color-text-primary); height: 100%; }
 .search input::placeholder { color: var(--color-text-placeholder); opacity: 1; }
-.summary-row { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-md); min-height: var(--size-touch-target); }
-.summary-row .linklike { color: var(--color-text-brand); font-weight: 700; font-size: 0.875rem; min-height: var(--size-touch-target); padding: 0 var(--spacing-xs); }
+.summary-row { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-md); }
+.summary-row .linklike { color: var(--color-text-brand); font-weight: 700; font-size: 0.875rem; min-height: var(--size-touch-target); margin: -10px 0; padding: 0 var(--spacing-xs); }
+
+/* Filters block: stacked on mobile */
+.filters, .filters__right { display: flex; flex-direction: column; gap: var(--spacing-lg); }
+.cards-head { display: none; }
 
 /* Cards */
 .cards { display: flex; flex-direction: column; gap: var(--spacing-md); }
@@ -141,7 +145,9 @@ textarea.input[aria-invalid="true"] { padding: 11px 13px; }
 
 @media (min-width: 960px) {
   .layout { max-width: 1280px; display: grid; grid-template-columns: minmax(380px, 460px) 1fr; align-items: start; }
-  body[data-view="list"] .detail-pane, body:not([data-view="list"]) .list-pane { display: flex; }
+  body:not([data-view="list"]) .list-pane { display: flex; }
+  body[data-view="list"] .layout { grid-template-columns: 1fr; }
+  body[data-view="list"] .list-pane { border-right: 0; min-height: 0; }
   .list-pane { border-right: var(--size-border) solid var(--color-border-subtle); min-height: calc(100vh - 64px); padding: var(--spacing-xl); }
   .detail-pane { padding: var(--spacing-xl) var(--spacing-2xl); }
   .detail-pane > * { max-width: 560px; width: 100%; }
@@ -149,6 +155,25 @@ textarea.input[aria-invalid="true"] { padding: 11px 13px; }
   .brand, .add-btn { display: inline-flex !important; }
   .brand { display: block !important; }
   .toast { left: auto; right: var(--spacing-xl); transform: none; }
+}
+/* Desktop, nothing open: wide list. Status tiles left; priority and search right; rows read like a table */
+@media (min-width: 960px) {
+  body[data-view="list"] .filters { flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--spacing-lg) var(--spacing-2xl); }
+  body[data-view="list"] .tiles { flex: 0 1 420px; min-width: 300px; }
+  body[data-view="list"] .filters__right { flex-direction: row; flex-wrap: wrap; align-items: flex-end; flex: 1 1 auto; justify-content: flex-end; gap: var(--spacing-lg); }
+  body[data-view="list"] .filter-group { width: 300px; flex: none; }
+  body[data-view="list"] .search { flex: 1 1 240px; min-width: 0; max-width: 420px; }
+  body[data-view="list"] .cards-head, body[data-view="list"] .card { display: grid; grid-template-columns: minmax(150px, 1.2fr) minmax(0, 3fr) 110px 130px 140px 24px; column-gap: var(--spacing-lg); align-items: center; }
+  body[data-view="list"] .cards-head { padding: 0 15px; font-size: 0.8125rem; font-weight: 700; color: var(--color-text-secondary); margin-bottom: var(--spacing-sm); }
+  body[data-view="list"] .card { padding: 12px 14px; }
+  body[data-view="list"] .card__top, body[data-view="list"] .card__badges { display: contents; }
+  body[data-view="list"] .card__name { order: 1; }
+  body[data-view="list"] .card__issue { order: 2; }
+  body[data-view="list"] .card__badges > :first-child { order: 3; justify-self: start; }
+  body[data-view="list"] .card__badges > :last-child { order: 4; justify-self: start; }
+  body[data-view="list"] .card__assignee { order: 5; }
+  body[data-view="list"] .card__top > .icon { order: 6; }
+  body[data-view="list"] .cards { gap: var(--spacing-sm); }
 }
 @media (max-width: 959px) {
   .detail-pane .pane-title { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); }
