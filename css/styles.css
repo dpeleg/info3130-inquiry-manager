@@ -46,7 +46,7 @@ body:not([data-view="list"]) .list-pane { display: none; }
 
 /* Status tiles and priority chips (filters) */
 .tiles { display: flex; gap: var(--spacing-sm); }
-.tile { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: var(--spacing-xs); padding: 10px; min-height: 76px; border-radius: var(--radius-md); border: var(--size-border) solid var(--color-border-default); background: var(--color-bg-surface); text-align: left; cursor: pointer; }
+.tile { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: var(--spacing-xs); padding: 10px; min-height: 76px; border-radius: var(--radius-md); border: var(--size-border) solid var(--color-border-default); background: var(--color-bg-surface); text-align: center; cursor: pointer; }
 .tile__label { display: flex; align-items: center; gap: var(--spacing-xs); font-size: 0.8125rem; color: var(--color-text-secondary); white-space: nowrap; }
 .tile__count { font-size: 1.75rem; line-height: 2rem; font-weight: 700; }
 .tile[aria-pressed="true"], .chip[aria-pressed="true"] { background: var(--color-bg-selected); border: 2px solid var(--color-bg-primary); }

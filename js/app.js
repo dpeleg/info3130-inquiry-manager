@@ -32,7 +32,7 @@ function toast(message) {
 /* ---------- List ---------- */
 function buildListShell() {
   listPane.innerHTML = `
-    <div class="list-head"><h1 class="pane-title" id="listTitle" tabindex="-1">Inquiries</h1><span class="muted" id="openCount"></span></div>
+    <div class="list-head"><h1 class="pane-title" id="listTitle" tabindex="-1">Inquiries</h1></div>
     <div class="filters">
     <div class="tiles" role="group" aria-label="Filter by status">
       ${STATUSES.map((s) => `<button type="button" class="tile" data-status="${esc(s)}" aria-pressed="false"><span class="tile__label">${icon(statusIcon(s), 14)}${esc(s)}</span><span class="tile__count" data-count="${esc(s)}">0</span></button>`).join('')}
@@ -80,7 +80,6 @@ function cardHtml(i) {
 
 function updateList() {
   const all = store.getAll();
-  $('#openCount', listPane).textContent = `${all.filter((i) => i.status !== 'Resolved').length} open`;
   listPane.querySelectorAll('[data-status]').forEach((b) => {
     const pressed = b.dataset.status === 'Resolved' ? showResolved : filters.status === b.dataset.status;
     b.setAttribute('aria-pressed', String(pressed));
