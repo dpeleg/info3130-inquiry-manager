@@ -59,6 +59,7 @@ function matchesFilters(i) {
 
 // Open inquiries (New and In progress), optionally narrowed by the status tile.
 function visibleInquiries() {
+  if (filters.status === 'Resolved') return [];
   return store.getAll().filter((i) => i.status !== 'Resolved' && (!filters.status || i.status === filters.status) && matchesFilters(i)).sort(byPriority);
 }
 
@@ -81,13 +82,14 @@ function cardHtml(i) {
 function updateList() {
   const all = store.getAll();
   listPane.querySelectorAll('[data-status]').forEach((b) => {
-    const pressed = b.dataset.status === 'Resolved' ? showResolved : filters.status === b.dataset.status;
-    b.setAttribute('aria-pressed', String(pressed));
+    b.setAttribute('aria-pressed', String(filters.status === b.dataset.status));
     $('[data-count]', b).textContent = all.filter((i) => i.status === b.dataset.status).length;
   });
   listPane.querySelectorAll('[data-priority]').forEach((b) => b.setAttribute('aria-pressed', String(filters.priority === b.dataset.priority)));
 
   const items = visibleInquiries();
+  const resolved = resolvedInquiries();
+  const onlyResolved = filters.status === 'Resolved';
   const active = Boolean(filters.status || filters.priority || filters.query.trim());
   let summary;
   if (!active) summary = `${items.length} open ${items.length === 1 ? 'inquiry' : 'inquiries'}, sorted by priority`;
@@ -95,46 +97,43 @@ function updateList() {
     const parts = [filters.status || 'Open'];
     if (filters.priority) parts.push(`${filters.priority} priority`);
     if (filters.query.trim()) parts.push(`search "${filters.query.trim()}"`);
-    summary = `${plural(items.length)} · ${parts.join(', ')}`;
+    summary = `${plural(onlyResolved ? resolved.length : items.length)} · ${parts.join(', ')}`;
   }
   $('#summary', listPane).textContent = summary;
   $('#clearFilters', listPane).hidden = !active;
 
   const results = $('#results', listPane);
-  const resolved = resolvedInquiries();
-  const showResolvedSection = !filters.status && all.some((i) => i.status === 'Resolved');
+  const open = showResolved || onlyResolved;
+  const showResolvedSection = (!filters.status || onlyResolved) && all.some((i) => i.status === 'Resolved');
   let html;
-  if (items.length) html = `<div class="cards-head" aria-hidden="true"><span>Customer</span><span>Inquiry</span><span>Priority</span><span>Status</span><span>Assigned to</span><span></span></div><ul class="cards">${items.map(cardHtml).join('')}</ul>`;
+  if (onlyResolved) html = all.some((i) => i.status === 'Resolved') ? '' : `<div class="empty"><h2>No resolved inquiries</h2><p class="muted">Resolved inquiries will show up here.</p></div>`;
+  else if (items.length) html = `<div class="cards-head" aria-hidden="true"><span>Customer</span><span>Inquiry</span><span>Priority</span><span>Status</span><span>Assigned to</span><span></span></div><ul class="cards">${items.map(cardHtml).join('')}</ul>`;
   else if (active) html = `<div class="empty"><h2>No open inquiries match</h2><p class="muted">Try a different search or clear the filters.</p><button type="button" class="btn btn--secondary" data-clear>Clear filters</button></div>`;
   else html = `<div class="empty"><h2>No open inquiries</h2><p class="muted">New inquiries will show up here.</p><a class="btn btn--primary" href="#/new">${icon('plus', 18)}Add inquiry</a></div>`;
   if (showResolvedSection) {
     html += `<section class="resolved" aria-label="Resolved inquiries">
-      <h2 class="resolved__heading"><button type="button" class="resolved__toggle" id="resolvedToggle" aria-expanded="${showResolved}" aria-controls="resolvedList">${icon('check', 18)}<span>Resolved (${resolved.length})</span>${icon('chevron', 20)}</button></h2>
-      <div id="resolvedList"${showResolved ? '' : ' hidden'}>${resolved.length ? `<ul class="cards">${resolved.map(cardHtml).join('')}</ul>` : '<p class="muted resolved__none">No resolved inquiries match.</p>'}</div>
+      <h2 class="resolved__heading"><button type="button" class="resolved__toggle" id="resolvedToggle" aria-expanded="${open}" aria-controls="resolvedList">${icon('check', 18)}<span>Resolved (${resolved.length})</span>${icon('chevron', 20)}</button></h2>
+      <div id="resolvedList"${open ? '' : ' hidden'}>${resolved.length ? `<ul class="cards">${resolved.map(cardHtml).join('')}</ul>` : '<p class="muted resolved__none">No resolved inquiries match.</p>'}</div>
     </section>`;
   }
   results.innerHTML = html;
 }
 
-function setResolvedOpen(open, scroll) {
-  showResolved = open;
+function setResolvedOpen(open) {
+  showResolved = open || filters.status === 'Resolved';
   const toggle = $('#resolvedToggle', listPane);
   if (toggle) {
     toggle.setAttribute('aria-expanded', String(open));
     $('#resolvedList', listPane).hidden = !open;
-    if (open && scroll) toggle.scrollIntoView({ block: 'start' });
   }
-  const tile = $('[data-status="Resolved"]', listPane);
-  if (tile) tile.setAttribute('aria-pressed', String(open));
 }
 
 function wireList() {
   listPane.addEventListener('click', (e) => {
     const toggle = e.target.closest('#resolvedToggle');
-    if (toggle) { setResolvedOpen(!showResolved, false); return; }
+    if (toggle) { if (filters.status !== 'Resolved') setResolvedOpen(!showResolved); return; }
     const t = e.target.closest('[data-status],[data-priority],[data-clear]');
     if (!t) return;
-    if (t.dataset.status === 'Resolved') { setResolvedOpen(!showResolved, true); return; }
     if (t.dataset.status) filters.status = filters.status === t.dataset.status ? null : t.dataset.status;
     else if (t.dataset.priority) filters.priority = filters.priority === t.dataset.priority ? null : t.dataset.priority;
     else { filters.status = null; filters.priority = null; filters.query = ''; $('#search').value = ''; }
