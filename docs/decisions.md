@@ -25,3 +25,4 @@
 | 21 | Desktop (960px and up): list on the left, details or new inquiry form in a right pane; no dialog | AI | A pane avoids the focus-trap work a dialog needs |
 | 22 | Default list shows open inquiries (New and In progress); Resolved is reached through its status tile | Human (earlier decision), AI implementation | Search and priority filters apply inside whichever status is showing |
 | 23 | Plain HTML, CSS and JavaScript (ES modules), localStorage key `inquiryManager.v1`, hash routing | AI | No build step, deploys as-is to GitHub Pages |
+| 24 | Resolved inquiries sit in a collapsed "Resolved (n)" list under the open list, greyed out; the Resolved tile opens it and scrolls to it. Status tiles New and In progress still filter the open list | Human | Replaces decision 22: the old Resolved tile filter showed nothing useful to the human. Priority and search filters apply to both lists. Figma not changed yet |
