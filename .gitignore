@@ -2,3 +2,5 @@
 .vscode/
 node_modules/
 Midterm_Project_Assignment.pdf
+docs/decisions.md
+*.pdf
