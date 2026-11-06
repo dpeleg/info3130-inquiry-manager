@@ -1,0 +1,75 @@
+/* Design tokens: same names and values as the Figma variables (Primitives, Color, Layout). */
+:root {
+  /* Primitives */
+  --primitive-white: #FFFFFF;
+  --primitive-slate-50: #F8FAFC;
+  --primitive-slate-200: #E2E8F0;
+  --primitive-slate-450: #8393A7;
+  --primitive-slate-500: #64748B;
+  --primitive-slate-600: #475569;
+  --primitive-slate-700: #334155;
+  --primitive-slate-900: #0F172A;
+  --primitive-violet-100: #E9E5F6;
+  --primitive-violet-700: #3A2A78;
+  --primitive-violet-800: #2F2163;
+  --primitive-red-100: #FEE2E2;
+  --primitive-red-700: #B42318;
+  --primitive-red-800: #991B1B;
+  --primitive-amber-100: #FEF3C7;
+  --primitive-amber-800: #92400E;
+  --primitive-blue-100: #DBEAFE;
+  --primitive-blue-700: #1D4ED8;
+  --primitive-teal-100: #CCFBF1;
+  --primitive-teal-800: #115E59;
+  --primitive-green-100: #DCFCE7;
+  --primitive-green-800: #166534;
+
+  /* Color (semantic) */
+  --color-bg-page: var(--primitive-slate-50);
+  --color-bg-surface: var(--primitive-white);
+  --color-bg-primary: var(--primitive-violet-700);
+  --color-bg-primary-hover: var(--primitive-violet-800);
+  --color-bg-selected: var(--primitive-violet-100);
+  --color-text-primary: var(--primitive-slate-900);
+  --color-text-secondary: var(--primitive-slate-600);
+  --color-text-placeholder: var(--primitive-slate-500);
+  --color-text-on-primary: var(--primitive-white);
+  --color-text-brand: var(--primitive-violet-700);
+  --color-text-error: var(--primitive-red-700);
+  --color-border-default: var(--primitive-slate-450);
+  --color-border-subtle: var(--primitive-slate-200);
+  --color-border-focus: var(--primitive-violet-700);
+  --color-border-error: var(--primitive-red-700);
+  --color-badge-high-bg: #FBEDEB;
+  --color-badge-high-fg: #A3302A;
+  --color-badge-medium-bg: #FBF3E0;
+  --color-badge-medium-fg: #8A5A0B;
+  --color-badge-low-bg: #EEF2F6;
+  --color-badge-low-fg: #475569;
+  --color-badge-new-bg: #EAF1FC;
+  --color-badge-new-fg: #1E4FA3;
+  --color-badge-in-progress-bg: #E3F6F3;
+  --color-badge-in-progress-fg: #0F6B63;
+  --color-badge-resolved-bg: #E6F4EA;
+  --color-badge-resolved-fg: #1F6B3A;
+
+  /* Layout */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
+  --spacing-3xl: 48px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  --size-touch-target: 44px;
+  --size-control-height: 48px;
+  --size-border: 1px;
+  --size-focus-ring: 3px;
+
+  /* Type: Atkinson Hyperlegible (Regular 400, Bold 700) */
+  --font-family: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
